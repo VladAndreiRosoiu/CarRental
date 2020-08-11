@@ -2,23 +2,24 @@ package ro.jademy.carrental.users;
 
 import ro.jademy.carrental.cars.Car;
 
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Client extends User {
 
     private String licenceIssueDate;
     private int deposit;
-    private Car rentedCar;
+    private List<Car> rentalHistory;
 
     public Client(String firstName, String lastName, String userName, String userPassword, String licenceIssueDate) {
         super(firstName, lastName, userName, userPassword);
         this.licenceIssueDate=licenceIssueDate;
+        this.rentalHistory=new ArrayList<>();
     }
 
     public String getLicenceIssueDate() {
         return licenceIssueDate;
-    }
-
-    public void setLicenceIssueDate(String licenceIssueDate) {
-        this.licenceIssueDate=licenceIssueDate;
     }
 
     public int getDeposit() {
@@ -29,11 +30,11 @@ public class Client extends User {
         this.deposit = deposit;
     }
 
-    public Car getRentedCar() {
-        return rentedCar;
+    public List<Car> getRentalHistory() {
+        return rentalHistory;
     }
 
-    public void setRentedCar(Car rentedCar) {
-        this.rentedCar = rentedCar;
+    public void setRentalHistory(List<Car> rentalHistory) {
+        this.rentalHistory = rentalHistory;
     }
 }

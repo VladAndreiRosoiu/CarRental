@@ -5,7 +5,8 @@ import ro.jademy.carrental.cars.Car;
 import ro.jademy.carrental.users.Client;
 import ro.jademy.carrental.users.User;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -14,8 +15,6 @@ public class RentalShop {
     private static final Scanner sc = new Scanner(System.in);
     private List<User> listOfUsers;
     private List<Car> listOfCars;
-    //private List<Car> availableCarList = new ArrayList<>();
-    private List<Car> rentedCarList = new ArrayList<>();
     private Salesman loggedInSalesman;
     private Client loggedInClient;
 
@@ -99,8 +98,7 @@ public class RentalShop {
                         System.out.println("Please enter UUID:");
                         keyword = sc.next();
                         System.out.println("Please enter how many days you want to rent the car:");
-                        int nrOfDays = sc.nextInt();
-                        rentCar(carByUUID(keyword), nrOfDays);
+                        rentCar(filterCarByUUID(keyword));
                         break;
                     case 5:
                         showRentedCar();
@@ -117,54 +115,14 @@ public class RentalShop {
 
     }
 
-    private void doLogin(String userName, String userPassword) {
-        if (validateLogIn(userName, userPassword) instanceof Salesman) {
-            loggedInSalesman = (Salesman) validateLogIn(userName, userPassword);
-        } else if (validateLogIn(userName, userPassword) instanceof Client) {
-            loggedInClient = (Client) validateLogIn(userName, userPassword);
-        }
-    }
 
-    private User validateLogIn(String userName, String userPassword) {
-        for (User user : listOfUsers) {
-            if (user.getUserName().equals(userName)) {
-                if (user.getUserPassword().equals(userPassword)) {
-                    return user;
-                }
-            }
-        }
-        return null;
-    }
+    //_____________________________________General use related methods__________________________________________________
 
     private void showWelcome() {
         System.out.println(" -----------------------------------------------");
         System.out.println("|    Welcome to the Car Rental Shop   |");
         System.out.println(" -----------------------------------------------");
         System.out.println();
-    }
-
-    private void showSalesmanMenu() {
-        System.out.println("                    MAIN MENU                   ");
-        System.out.println("1. List all cars");
-        System.out.println("2. List available cars");
-        System.out.println("3. List rented cars");
-        System.out.println("4. Check income");
-        System.out.println("5. List all users");
-        System.out.println("6. Add user");
-        System.out.println("7. Add / remove car");
-        System.out.println("8. Logout");
-        System.out.println("9. Exit");
-    }
-
-    private void showClientMenu() {
-        System.out.println("                    MAIN MENU                   ");
-        System.out.println("1. List all cars");
-        System.out.println("2. List all available cars");
-        System.out.println("3. Filter car list by:");
-        System.out.println("4. Rent car");
-        System.out.println("5. Show rented car");
-        System.out.println("5. Logout");
-        System.out.println("6. Exit");
     }
 
     private void showFilterMenuOptions() {
@@ -179,58 +137,23 @@ public class RentalShop {
 
     }
 
-    private void showAllCars() {
-
-        // displays all the cars that the rental shop has (including unavailable cars)
-
-        for (Car car : listOfCars) {
-            System.out.println(car);
+    private User validateLogIn(String userName, String userPassword) {
+        for (User user : listOfUsers) {
+            if (user.getUserName().equals(userName)) {
+                if (user.getUserPassword().equals(userPassword)) {
+                    return user;
+                }
+            }
         }
+        return null;
     }
 
-//    private void showAllAvailableCars() {
-//
-//        for (Car car : listOfCars) {
-//            if (!car.isCarRented()) {
-//                availableCarList.add(car);
-//                System.out.println(car);
-//            }
-//        }
-//    }
-
-    private void showRentedCars() {
-
-        //displays cars that are rented
-        //must display also by who the car is rented, and the period
-
-    }
-
-    private void checkIncome() {
-
-        //calculates current income from rented cars at the moment
-
-    }
-
-    private void showAllClients() {
-
-        //displays the list of clients
-        //displays the history of a specific client
-
-    }
-
-    private void addNewClient() {
-
-        //this method allows the salesman to add new client
-    }
-
-    private void addNewCar() {
-
-        //this method allows the salesman to add a new car
-    }
-
-    private void removeCar() {
-
-        //this method allows the salesman to remove a car from the list
+    private void doLogin(String userName, String userPassword) {
+        if (validateLogIn(userName, userPassword) instanceof Salesman) {
+            loggedInSalesman = (Salesman) validateLogIn(userName, userPassword);
+        } else if (validateLogIn(userName, userPassword) instanceof Client) {
+            loggedInClient = (Client) validateLogIn(userName, userPassword);
+        }
     }
 
     private void doLogOut() {
@@ -243,6 +166,15 @@ public class RentalShop {
 
         //exist app
 
+    }
+
+    private void showAllCars() {
+
+        // displays all the cars that the rental shop has (including unavailable cars)
+
+        for (Car car : listOfCars) {
+            System.out.println(car);
+        }
     }
 
     private void filterCars(int option) {
@@ -300,7 +232,7 @@ public class RentalShop {
         return null;
     }
 
-    public Car carByUUID(String uuid) {
+    private Car filterCarByUUID(String uuid) {
         for (Car car : listOfCars) {
             if (car.getUUID().equals(uuid)) {
                 return car;
@@ -309,7 +241,30 @@ public class RentalShop {
         return null;
     }
 
-    private void depositForRent() {
+    public void calculatePrice(int numberOfDays) {
+        // TODO: apply a discount to the base price of a car based on the number of rental days
+        // TODO: document the implemented discount algorithm
+
+        // TODO: for a more difficult algorithm, change this method to include date intervals and take into account
+        //       weekdays and national holidays in which the discount should be smaller
+
+        // Q: what should be the return type of this method?
+    }
+
+    //____________________________________________Client related methods________________________________________________
+
+    private void showClientMenu() {
+        System.out.println("                    MAIN MENU                   ");
+        System.out.println("1. List all cars");
+        System.out.println("2. List all available cars");
+        System.out.println("3. Filter car list by:");
+        System.out.println("4. Rent car");
+        System.out.println("5. Show rented car");
+        System.out.println("5. Logout");
+        System.out.println("6. Exit");
+    }
+
+    private void doDepositForRent() {
         int deposit;
         System.out.println("To rent a car, you need to make a deposit first.");
         System.out.println("For a category one car you need to deposit at least 100.");
@@ -325,9 +280,8 @@ public class RentalShop {
         }
     }
 
-
-    private boolean validateRent(Car car) {
-        depositForRent();
+    private boolean validateDeposit(Car car) {
+        doDepositForRent();
         if (car.getRentCategory() == 1 && loggedInClient.getDeposit() >= 100) {
             return true;
         } else if (car.getRentCategory() == 2 && loggedInClient.getDeposit() >= 200) {
@@ -337,41 +291,106 @@ public class RentalShop {
         } else return car.getRentCategory() == 4 && loggedInClient.getDeposit() >= 400;
     }
 
+    private boolean validateDriverLicence(Car car) {
 
-    private void rentCar(Car car, int nrOfDays) {
-        int hasToPay;
-        if (validateRent(car)) {
-            System.out.println("Successfully rented " + car);
-            loggedInClient.setRentedCar(car);
-            listOfCars.remove(car);
-            rentedCarList.add(car);
-            if (nrOfDays > 10) {
-                hasToPay = nrOfDays * car.getRentPricePerDay();
-                System.out.println("Because you want to rent the car for more than 10 days, you get a discount of 15%!");
-                System.out.println("The total will be : " + hasToPay);
-            } else {
-                hasToPay = nrOfDays * car.getRentPricePerDay();
-                System.out.println("The total will be : " + hasToPay);
+        LocalDate currentDate = LocalDate.now();
+        LocalDate dateToRentCategoryOneCar = currentDate.minusYears(1);
+        LocalDate dateToRentCategoryTwoCar = currentDate.minusYears(2);
+        LocalDate dateToRentCategoryThreeCar = currentDate.minusYears(3);
+        LocalDate dateToRentCategoryFourCar = currentDate.minusYears(3);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        LocalDate driverLicenceIssueDate = LocalDate.parse(loggedInClient.getLicenceIssueDate(), formatter);
+
+        if (car.getRentCategory() == 1) {
+            return driverLicenceIssueDate.isBefore(dateToRentCategoryOneCar);
+        } else if (car.getRentCategory() == 2) {
+            return driverLicenceIssueDate.isBefore(dateToRentCategoryTwoCar);
+        } else if (car.getRentCategory() == 3) {
+            return driverLicenceIssueDate.isBefore(dateToRentCategoryThreeCar);
+        } else if (car.getRentCategory() == 4) {
+            return driverLicenceIssueDate.isBefore(dateToRentCategoryFourCar);
+        }
+        return false;
+    }
+
+    private void rentCar(Car car) {
+        if (validateDriverLicence(car)){
+            if (validateDeposit(car)){
+                System.out.println("You have successfully rented "+car);
+                loggedInClient.getRentalHistory().add(car);
+                listOfCars.remove(car);
+            }else {
+                System.out.println("Your deposit is not equal to minimum amount required to rent desired car!");
             }
+        }else {
+            System.out.println("Driving licence issue date not meeting minimum requirements!");
         }
     }
 
     private void showRentedCar() {
-        System.out.println(loggedInClient.getRentedCar());
+        //
+        for (Car car:loggedInClient.getRentalHistory()){
+            System.out.println(car);
+        }
     }
 
     private void returnRentedCar() {
+
+        //returning rented car
+        //getting the amount deposited back and paying to cost to rent the car
     }
 
-    public void calculatePrice(int numberOfDays) {
-        // TODO: apply a discount to the base price of a car based on the number of rental days
-        // TODO: document the implemented discount algorithm
+    //__________________________________________Salesman related methods_______________________________________________
 
-        // TODO: for a more difficult algorithm, change this method to include date intervals and take into account
-        //       weekdays and national holidays in which the discount should be smaller
-
-        // Q: what should be the return type of this method?
+    private void showSalesmanMenu() {
+        System.out.println("                    MAIN MENU                   ");
+        System.out.println("1. List all cars");
+        System.out.println("2. List available cars");
+        System.out.println("3. List rented cars");
+        System.out.println("4. Check income");
+        System.out.println("5. List all users");
+        System.out.println("6. Add user");
+        System.out.println("7. Add / remove car");
+        System.out.println("8. Logout");
+        System.out.println("9. Exit");
     }
+
+    private void showRentedCars() {
+
+        //displays cars that are rented
+        //must display also by who the car is rented, and the period
+
+    }
+
+    private void checkIncome() {
+
+        //calculates current income from rented cars at the moment
+
+    }
+
+    private void showAllClients() {
+
+        //displays the list of clients
+        //displays the history of a specific client
+
+    }
+
+    private void addNewClient() {
+
+        //this method allows the salesman to add new client
+    }
+
+    private void addNewCar() {
+
+        //this method allows the salesman to add a new car
+    }
+
+    private void removeCar() {
+
+        //this method allows the salesman to remove a car from the list
+    }
+
 }
 
 

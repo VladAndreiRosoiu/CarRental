@@ -13,11 +13,10 @@ public class Main {
 
 
     //TODO:
-    // add admin logic - admin can add/remove cars
-    //                     - admin can add/remove users
-    //                     - admin can see rented cars and income produced
-    // add client logic - client can borrow car(add validation for driving licence issue date)
-    //                      - client will have to pay for rented car + add guarantee a deposit before renting car.
-    //                      - client can return car. After rent the deposit must be returned to client if car has not been damaged
+    // add a attribute on the client List<Car> rentedHistory to hold rental history of that client. Implement renting discount based on this list
+    // for 3 rented cars, 10 % discount, for 6 rented cars 15 % discount, for more than 12 rented cars do 20 % discount
+    //implement rent validation on driving licence issue date
+    //ex: if issue date is less than a year, client can't rent. if more than a year, client may rent a cat 1 and 2 car, for more than 2, other categories
+
 
 }

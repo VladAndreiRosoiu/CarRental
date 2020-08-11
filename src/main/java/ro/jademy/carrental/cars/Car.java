@@ -84,13 +84,9 @@ public  abstract class Car {
 
     @Override
     public String toString() {
-        return "Car{" +
-                "UUID='" + UUID + '\'' +
-                ", make='" + make + '\'' +
-                ", model='" + model + '\'' +
-                ", rentPricePerDay=" + rentPricePerDay +
-                ", seatNumber=" + seatNumber +
-                ", fuelType='" + fuelType + '\'' +
-                '}';
+        return "Make: "+make+
+                ", Model: " + model+
+                ", rent category "+rentCategory+
+                ", having a standard rent price per day of "+rentPricePerDay;
     }
 }
