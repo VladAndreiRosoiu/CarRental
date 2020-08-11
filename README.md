@@ -1,3 +1,2 @@
-# CarRental
-
-A car rental management application starter exercise.
+# CarRentalApp
+A car rental management application.
