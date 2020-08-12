@@ -1,6 +1,4 @@
-package ro.jademy.carrental.users;
-
-import ro.jademy.carrental.users.User;
+package ro.jademy.carrental.models.users;
 
 public class Salesman extends User {
     public Salesman(String firstName, String lastName, String userName, String userPassword) {

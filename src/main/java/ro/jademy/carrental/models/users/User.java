@@ -1,4 +1,4 @@
-package ro.jademy.carrental.users;
+package ro.jademy.carrental.models.users;
 
 public abstract class User {
     private String firstName;

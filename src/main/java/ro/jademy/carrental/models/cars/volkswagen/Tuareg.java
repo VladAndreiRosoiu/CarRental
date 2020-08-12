@@ -1,4 +1,4 @@
-package ro.jademy.carrental.cars.volkswagen;
+package ro.jademy.carrental.models.cars.volkswagen;
 
 public class Tuareg extends Volkswagen {
 

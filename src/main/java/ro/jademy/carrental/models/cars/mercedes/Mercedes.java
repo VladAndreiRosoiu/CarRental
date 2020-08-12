@@ -1,6 +1,6 @@
-package ro.jademy.carrental.cars.mercedes;
+package ro.jademy.carrental.models.cars.mercedes;
 
-import ro.jademy.carrental.cars.Car;
+import ro.jademy.carrental.models.cars.Car;
 
 public abstract class Mercedes extends Car {
 

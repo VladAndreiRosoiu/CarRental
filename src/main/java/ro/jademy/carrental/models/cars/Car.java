@@ -1,4 +1,4 @@
-package ro.jademy.carrental.cars;
+package ro.jademy.carrental.models.cars;
 
 
 public  abstract class Car {
@@ -87,6 +87,7 @@ public  abstract class Car {
         return "Make: "+make+
                 ", Model: " + model+
                 ", rent category "+rentCategory+
-                ", having a standard rent price per day of "+rentPricePerDay;
+                ", having a standard rent price per day of "+rentPricePerDay+
+                ", with UUID "+ getUUID();
     }
 }

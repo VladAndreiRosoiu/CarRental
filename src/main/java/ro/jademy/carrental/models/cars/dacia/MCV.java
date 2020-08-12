@@ -1,4 +1,4 @@
-package ro.jademy.carrental.cars.dacia;
+package ro.jademy.carrental.models.cars.dacia;
 
 public class MCV extends Dacia {
 

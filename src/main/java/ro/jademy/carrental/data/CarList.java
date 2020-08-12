@@ -1,15 +1,15 @@
 package ro.jademy.carrental.data;
 
-import ro.jademy.carrental.cars.Car;
-import ro.jademy.carrental.cars.dacia.Logan;
-import ro.jademy.carrental.cars.dacia.MCV;
-import ro.jademy.carrental.cars.dacia.Sandero;
-import ro.jademy.carrental.cars.mercedes.AClass;
-import ro.jademy.carrental.cars.mercedes.CClass;
-import ro.jademy.carrental.cars.mercedes.GLE;
-import ro.jademy.carrental.cars.volkswagen.Golf;
-import ro.jademy.carrental.cars.volkswagen.Touran;
-import ro.jademy.carrental.cars.volkswagen.Tuareg;
+import ro.jademy.carrental.models.cars.Car;
+import ro.jademy.carrental.models.cars.dacia.Logan;
+import ro.jademy.carrental.models.cars.dacia.MCV;
+import ro.jademy.carrental.models.cars.dacia.Sandero;
+import ro.jademy.carrental.models.cars.mercedes.AClass;
+import ro.jademy.carrental.models.cars.mercedes.CClass;
+import ro.jademy.carrental.models.cars.mercedes.GLE;
+import ro.jademy.carrental.models.cars.volkswagen.Golf;
+import ro.jademy.carrental.models.cars.volkswagen.Touran;
+import ro.jademy.carrental.models.cars.volkswagen.Tuareg;
 
 import java.util.ArrayList;
 import java.util.List;

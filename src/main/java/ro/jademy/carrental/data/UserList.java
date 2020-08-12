@@ -1,8 +1,8 @@
 package ro.jademy.carrental.data;
 
-import ro.jademy.carrental.users.Salesman;
-import ro.jademy.carrental.users.Client;
-import ro.jademy.carrental.users.User;
+import ro.jademy.carrental.models.users.Salesman;
+import ro.jademy.carrental.models.users.Client;
+import ro.jademy.carrental.models.users.User;
 
 import java.util.ArrayList;
 import java.util.List;

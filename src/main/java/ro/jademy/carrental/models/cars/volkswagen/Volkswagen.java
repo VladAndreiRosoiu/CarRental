@@ -1,6 +1,6 @@
-package ro.jademy.carrental.cars.volkswagen;
+package ro.jademy.carrental.models.cars.volkswagen;
 
-import ro.jademy.carrental.cars.Car;
+import ro.jademy.carrental.models.cars.Car;
 
 public abstract class Volkswagen extends Car {
 

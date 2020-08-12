@@ -1,6 +1,6 @@
-package ro.jademy.carrental.cars.dacia;
+package ro.jademy.carrental.models.cars.dacia;
 
-import ro.jademy.carrental.cars.Car;
+import ro.jademy.carrental.models.cars.Car;
 
 public abstract class Dacia extends Car {
 

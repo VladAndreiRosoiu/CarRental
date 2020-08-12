@@ -1,4 +1,4 @@
-package ro.jademy.carrental.cars.mercedes;
+package ro.jademy.carrental.models.cars.mercedes;
 
 public class GLE extends Mercedes {
 

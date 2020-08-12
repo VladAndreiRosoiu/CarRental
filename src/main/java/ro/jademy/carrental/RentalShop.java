@@ -1,12 +1,14 @@
 package ro.jademy.carrental;
 
-import ro.jademy.carrental.users.Salesman;
-import ro.jademy.carrental.cars.Car;
-import ro.jademy.carrental.users.Client;
-import ro.jademy.carrental.users.User;
+import ro.jademy.carrental.models.RentedCar;
+import ro.jademy.carrental.models.users.Salesman;
+import ro.jademy.carrental.models.cars.Car;
+import ro.jademy.carrental.models.users.Client;
+import ro.jademy.carrental.models.users.User;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,6 +19,8 @@ public class RentalShop {
     private List<Car> listOfCars;
     private Salesman loggedInSalesman;
     private Client loggedInClient;
+    private RentedCar rentedCar;
+    private List<RentedCar> rentedCars = new ArrayList<>();
 
     public RentalShop(List<User> userList, List<Car> carList) {
         this.listOfUsers = userList;
@@ -26,9 +30,7 @@ public class RentalShop {
     public void rentalShop() {
 
         int menuChoice;
-        boolean isLoggedIn = false;
         String keyword;
-        //showAllAvailableCars();
 
         showWelcome();
         System.out.println("Please enter username:");
@@ -39,7 +41,6 @@ public class RentalShop {
 
         do {
             if (loggedInSalesman != null) {
-                isLoggedIn = true;
                 showSalesmanMenu();
                 System.out.println("Please enter choice:");
                 menuChoice = sc.nextInt();
@@ -77,7 +78,6 @@ public class RentalShop {
                 }
             }
             if (loggedInClient != null) {
-                isLoggedIn = true;
                 showClientMenu();
                 System.out.println("Please enter choice:");
                 menuChoice = sc.nextInt();
@@ -97,7 +97,6 @@ public class RentalShop {
                     case 4:
                         System.out.println("Please enter UUID:");
                         keyword = sc.next();
-                        System.out.println("Please enter how many days you want to rent the car:");
                         rentCar(filterCarByUUID(keyword));
                         break;
                     case 5:
@@ -111,10 +110,9 @@ public class RentalShop {
                         break;
                 }
             }
-        } while (isLoggedIn);
+        } while (loggedInClient != null || loggedInSalesman != null);
 
     }
-
 
     //_____________________________________General use related methods__________________________________________________
 
@@ -159,6 +157,9 @@ public class RentalShop {
     private void doLogOut() {
 
         //logs out the current user
+        loggedInClient = null;
+        loggedInSalesman = null;
+        System.out.println("Goodbye!");
 
     }
 
@@ -315,30 +316,46 @@ public class RentalShop {
     }
 
     private void rentCar(Car car) {
-        if (validateDriverLicence(car)){
-            if (validateDeposit(car)){
-                System.out.println("You have successfully rented "+car);
-                loggedInClient.getRentalHistory().add(car);
+        if (validateDriverLicence(car)) {
+            if (validateDeposit(car)) {
+                System.out.println("You have successfully rented " + car);
+                loggedInClient.setCurrentlyRentedCar(car);
+                rentedCars.add(createRentedCar(car));
                 listOfCars.remove(car);
-            }else {
+            } else {
                 System.out.println("Your deposit is not equal to minimum amount required to rent desired car!");
             }
-        }else {
+        } else {
             System.out.println("Driving licence issue date not meeting minimum requirements!");
         }
     }
 
+    private RentedCar createRentedCar(Car car) {
+        rentedCar.setRentedCar(car);
+        rentedCar.setClient(loggedInClient);
+        return rentedCar;
+    }
+
     private void showRentedCar() {
         //
-        for (Car car:loggedInClient.getRentalHistory()){
-            System.out.println(car);
-        }
+        System.out.println(loggedInClient.getCurrentlyRentedCar());
     }
 
     private void returnRentedCar() {
-
+        for (RentedCar rentedCar : rentedCars) {
+            if (rentedCar.getClient().getUserName().equals(loggedInClient.getUserName()) &&
+                    rentedCar.getRentedCar().equals(loggedInClient.getCurrentlyRentedCar())) {
+                loggedInClient.getRentalHistory().add(rentedCar);
+                rentedCars.remove(rentedCar);
+                listOfCars.add(rentedCar.getRentedCar());
+            }
+        }
         //returning rented car
         //getting the amount deposited back and paying to cost to rent the car
+    }
+
+    private int calculatePrice(){
+        return 0;
     }
 
     //__________________________________________Salesman related methods_______________________________________________

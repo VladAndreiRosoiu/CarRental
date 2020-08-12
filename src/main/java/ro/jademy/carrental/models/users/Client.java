@@ -1,6 +1,7 @@
-package ro.jademy.carrental.users;
+package ro.jademy.carrental.models.users;
 
-import ro.jademy.carrental.cars.Car;
+import ro.jademy.carrental.models.RentedCar;
+import ro.jademy.carrental.models.cars.Car;
 
 
 import java.util.ArrayList;
@@ -10,7 +11,8 @@ public class Client extends User {
 
     private String licenceIssueDate;
     private int deposit;
-    private List<Car> rentalHistory;
+    private Car currentlyRentedCar;
+    private List<RentedCar> rentalHistory;
 
     public Client(String firstName, String lastName, String userName, String userPassword, String licenceIssueDate) {
         super(firstName, lastName, userName, userPassword);
@@ -30,11 +32,23 @@ public class Client extends User {
         this.deposit = deposit;
     }
 
-    public List<Car> getRentalHistory() {
+    public List<RentedCar> getRentalHistory() {
         return rentalHistory;
     }
 
-    public void setRentalHistory(List<Car> rentalHistory) {
+    public void setRentalHistory(List<RentedCar> rentalHistory) {
         this.rentalHistory = rentalHistory;
+    }
+
+    public void setLicenceIssueDate(String licenceIssueDate) {
+        this.licenceIssueDate = licenceIssueDate;
+    }
+
+    public Car getCurrentlyRentedCar() {
+        return currentlyRentedCar;
+    }
+
+    public void setCurrentlyRentedCar(Car currentlyRentedCar) {
+        this.currentlyRentedCar = currentlyRentedCar;
     }
 }
