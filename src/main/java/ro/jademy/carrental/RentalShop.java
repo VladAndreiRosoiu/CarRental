@@ -19,7 +19,7 @@ public class RentalShop {
     private List<Car> listOfCars;
     private Salesman loggedInSalesman;
     private Client loggedInClient;
-    private RentedCar rentedCar;
+    private RentedCar rentedCar = new RentedCar();
     private List<RentedCar> rentedCars = new ArrayList<>();
 
     public RentalShop(List<User> userList, List<Car> carList) {
@@ -95,15 +95,55 @@ public class RentalShop {
                         filterCars(menuChoice);
                         break;
                     case 4:
-                        System.out.println("Please enter UUID:");
+                        System.out.println("Please enter car  UUID:");
                         keyword = sc.next();
-                        rentCar(filterCarByUUID(keyword));
+                        Car tempCar = filterCarByUUID(keyword);
+                        if (validateDriverLicence(tempCar)) {
+                            showDepositInformation();
+                            int deposit = sc.nextInt();
+                            doDepositForRent(deposit);
+                            if (validateDeposit(tempCar)) {
+                                System.out.println("Please enter number of days:");
+                                int nrOfDays = sc.nextInt();
+                                System.out.println("For the selected car and desired period you will have to pay " + calculateRentPrice(tempCar, nrOfDays));
+                                rentCar(tempCar);
+                                System.out.println("You have successfully rented " + tempCar);
+                                rentedCars.add(createRentedCar(tempCar, calculateRentPrice(tempCar, nrOfDays)));
+                            } else {
+                                System.out.println("Your deposit is not equal to minimum amount required to rent desired car!");
+                            }
+                        } else {
+                            System.out.println("Driving licence issue date not meeting minimum requirements!");
+                        }
                         break;
                     case 5:
                         showRentedCar();
                         break;
                     case 6:
+                        RentedCar rented = new RentedCar();
+                        for (RentedCar rentedCar : rentedCars) {
+                            if (rentedCar.getClient().getUserName().equals(loggedInClient.getUserName()) &&
+                                    rentedCar.getRentedCar().equals(loggedInClient.getCurrentlyRentedCar())) {
+                                rented = rentedCar;
+                            }
+                        }
+                        System.out.println("Before returning the car you will have to pay: " + rented.getRentPricePerDay());
+                        int paid = sc.nextInt();
+                        if (paid == rented.getRentPricePerDay()) {
+                            returnRentedCar();
+                            System.out.println(rentedCars.size());
+                            for (RentedCar rentedCar : loggedInClient.getRentalHistory()) {
+                                System.out.println(rentedCar.getRentedCar());
+                            }
+                            System.out.println("Deposit refunded!");
+                        }
+
+                        break;
+                    case 7:
                         doLogOut();
+                        break;
+                    case 8:
+                        //do exit
                         break;
                     default:
                         System.out.println("default");
@@ -254,6 +294,15 @@ public class RentalShop {
 
     //____________________________________________Client related methods________________________________________________
 
+    private void showDepositInformation() {
+        System.out.println("To rent a car, you need to make a deposit first.");
+        System.out.println("For a category one car you need to deposit at least 100.");
+        System.out.println("For a category two car you need to deposit at least 200.");
+        System.out.println("For a category three car you need to deposit at least 300.");
+        System.out.println("For a category four car you need to deposit at least 400.");
+        System.out.println("Please deposit the correct amount for rented car.");
+    }
+
     private void showClientMenu() {
         System.out.println("                    MAIN MENU                   ");
         System.out.println("1. List all cars");
@@ -261,35 +310,9 @@ public class RentalShop {
         System.out.println("3. Filter car list by:");
         System.out.println("4. Rent car");
         System.out.println("5. Show rented car");
+        System.out.println("6. Return rented car");
         System.out.println("5. Logout");
         System.out.println("6. Exit");
-    }
-
-    private void doDepositForRent() {
-        int deposit;
-        System.out.println("To rent a car, you need to make a deposit first.");
-        System.out.println("For a category one car you need to deposit at least 100.");
-        System.out.println("For a category two car you need to deposit at least 200.");
-        System.out.println("For a category three car you need to deposit at least 300.");
-        System.out.println("For a category four car you need to deposit at least 400.");
-        System.out.println("Please deposit the correct amount for rented car.");
-        deposit = sc.nextInt();
-        if (deposit != 0) {
-            loggedInClient.setDeposit(deposit);
-        } else {
-            System.out.println("You cannot make a deposit of 0.");
-        }
-    }
-
-    private boolean validateDeposit(Car car) {
-        doDepositForRent();
-        if (car.getRentCategory() == 1 && loggedInClient.getDeposit() >= 100) {
-            return true;
-        } else if (car.getRentCategory() == 2 && loggedInClient.getDeposit() >= 200) {
-            return true;
-        } else if (car.getRentCategory() == 3 && loggedInClient.getDeposit() >= 300) {
-            return true;
-        } else return car.getRentCategory() == 4 && loggedInClient.getDeposit() >= 400;
     }
 
     private boolean validateDriverLicence(Car car) {
@@ -315,46 +338,92 @@ public class RentalShop {
         return false;
     }
 
+    private void doDepositForRent(int deposit) {
+        loggedInClient.setDeposit(deposit);
+
+    }
+
+    private boolean validateDeposit(Car car) {
+        if (car.getRentCategory() == 1 && loggedInClient.getDeposit() >= 100) {
+            return true;
+        } else if (car.getRentCategory() == 2 && loggedInClient.getDeposit() >= 200) {
+            return true;
+        } else if (car.getRentCategory() == 3 && loggedInClient.getDeposit() >= 300) {
+            return true;
+        } else return car.getRentCategory() == 4 && loggedInClient.getDeposit() >= 400;
+    }
+
     private void rentCar(Car car) {
         if (validateDriverLicence(car)) {
             if (validateDeposit(car)) {
-                System.out.println("You have successfully rented " + car);
                 loggedInClient.setCurrentlyRentedCar(car);
-                rentedCars.add(createRentedCar(car));
                 listOfCars.remove(car);
-            } else {
-                System.out.println("Your deposit is not equal to minimum amount required to rent desired car!");
             }
-        } else {
-            System.out.println("Driving licence issue date not meeting minimum requirements!");
         }
     }
 
-    private RentedCar createRentedCar(Car car) {
+    private RentedCar createRentedCar(Car car, int price) {
         rentedCar.setRentedCar(car);
         rentedCar.setClient(loggedInClient);
+        rentedCar.setRentPricePerDay(price);
         return rentedCar;
     }
 
     private void showRentedCar() {
         //
-        System.out.println(loggedInClient.getCurrentlyRentedCar());
+        if (loggedInClient.getCurrentlyRentedCar() != null) {
+            System.out.println(loggedInClient.getCurrentlyRentedCar());
+        } else {
+            System.out.println("You have no cars currently rented!");
+        }
     }
 
     private void returnRentedCar() {
+        RentedCar rented = new RentedCar();
         for (RentedCar rentedCar : rentedCars) {
             if (rentedCar.getClient().getUserName().equals(loggedInClient.getUserName()) &&
                     rentedCar.getRentedCar().equals(loggedInClient.getCurrentlyRentedCar())) {
-                loggedInClient.getRentalHistory().add(rentedCar);
-                rentedCars.remove(rentedCar);
-                listOfCars.add(rentedCar.getRentedCar());
+                rented = rentedCar;
             }
         }
+        loggedInClient.getRentalHistory().add(rented);
+        listOfCars.add(rented.getRentedCar());
+        rentedCars.remove(rented);
+        loggedInClient.setCurrentlyRentedCar(null);
+
         //returning rented car
         //getting the amount deposited back and paying to cost to rent the car
     }
 
-    private int calculatePrice(){
+    private int calculateRentPrice(Car car, int rentDays) {
+        if (car.getRentCategory() == 1) {
+            if (rentDays > 10) {
+                return (car.getRentPricePerDay() - 2) * rentDays;
+            } else {
+                return car.getRentPricePerDay() * rentDays;
+            }
+        }
+        if (car.getRentCategory() == 2) {
+            if (rentDays > 10) {
+                return (car.getRentPricePerDay() - 4) * rentDays;
+            } else {
+                return car.getRentPricePerDay() * rentDays;
+            }
+        }
+        if (car.getRentCategory() == 3) {
+            if (rentDays > 10) {
+                return (car.getRentPricePerDay() - 10) * rentDays;
+            } else {
+                return car.getRentPricePerDay() * rentDays;
+            }
+        }
+        if (car.getRentCategory() == 4) {
+            if (rentDays > 10) {
+                return (car.getRentPricePerDay() - 15) * rentDays;
+            } else {
+                return car.getRentPricePerDay() * rentDays;
+            }
+        }
         return 0;
     }
 
