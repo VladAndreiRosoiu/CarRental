@@ -15,13 +15,15 @@ public class RentalList {
     Car car1 = new Logan(1, 10, 4, "Gasoline");
     Car car2 = new GLE(4, 80, 5, "Gasoline");
     Car car3 = new GLE(4, 80, 5, "Gasoline");
+    LocalDate pickUpDate=LocalDate.now();
+    LocalDate returnDate=pickUpDate.plusDays(1);
     User user1 = new Client("Test1", "Test1", "test", "test", LocalDate.of(2010, 2, 28));
     User user2 = new Client("Test2", "Test2", "test", "test", LocalDate.of(2010, 2, 28));
     User user3 = new Client("Test3", "Test3", "test", "test", LocalDate.of(2010, 2, 28));
 
-    RentedCar rentedCar1=new RentedCar(car1,(Client) user1, 10);
-    RentedCar rentedCar2=new RentedCar(car2,(Client) user2, 80);
-    RentedCar rentedCar3=new RentedCar(car3,(Client) user3, 80);
+    RentedCar rentedCar1=new RentedCar(car1,(Client) user1, 10,pickUpDate,returnDate);
+    RentedCar rentedCar2=new RentedCar(car2,(Client) user2, 80,pickUpDate,returnDate);
+    RentedCar rentedCar3=new RentedCar(car3,(Client) user3, 80,pickUpDate,returnDate);
 
     public List<RentedCar> getRentalList(){
         List<RentedCar> rentedCars=new ArrayList<>();

@@ -71,10 +71,12 @@ public class RentServiceImpl implements RentService {
     }
 
     @Override
-    public RentedCar rentedCar(Car car, Client client, int rentPrice) {
+    public RentedCar rentedCar(Car car, Client client, int rentPrice, LocalDate pickUpDate, LocalDate returnDate) {
         RentedCar rentedCar = new RentedCar();
         rentedCar.setRentedCar(car);
         rentedCar.setClient(client);
+        rentedCar.setRentDate(pickUpDate);
+        rentedCar.setReturnDate(returnDate);
         rentedCar.setRentPriceAfterDiscount(rentPrice);
         return rentedCar;
     }

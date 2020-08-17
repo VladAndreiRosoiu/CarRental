@@ -8,6 +8,7 @@ import ro.jademy.carrental.models.users.Salesman;
 import ro.jademy.carrental.models.users.User;
 import ro.jademy.carrental.services.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -130,12 +131,14 @@ public class RentalShop {
                                 if (rentService.validateDepositForRent(loggedInClient, tempCar)) {
                                     System.out.println("Conditions met!");
                                     System.out.println("Please enter number of days for rental : ");
+                                    LocalDate pickUpDate=LocalDate.now();
                                     int nrOfDays = sc.nextInt();
+                                    LocalDate returnDate=pickUpDate.plusDays(nrOfDays);
                                     int finalPrice = rentService.calculateFinalRentPrice(tempCar, nrOfDays);
                                     System.out.println("For your rent you will have to pay " + finalPrice + ".");
                                     rentService.rentCar(listOfCars, loggedInClient, tempCar);
                                     System.out.println("Car successfully rented!");
-                                    rentedCars.add(rentService.rentedCar(tempCar, loggedInClient, finalPrice));
+                                    rentedCars.add(rentService.rentedCar(tempCar, loggedInClient, finalPrice, pickUpDate,returnDate));
                                 }
                             }
                             break;
@@ -315,7 +318,7 @@ public class RentalShop {
         for (RentedCar rentedCar : rentedCars) {
             System.out.println(rentedCar.getRentedCar());
             System.out.println("Rented by : " + rentedCar.getClient().getFullName());
-            System.out.println("Car rented for " + "days.");
+            System.out.println("Car rented from " + rentedCar.getRentDate()+ " to "+rentedCar.getReturnDate()+".");
         }
 
     }
