@@ -7,8 +7,12 @@ import java.util.List;
 
 public class StatisticsServiceImpl implements StatisticsService {
     @Override
-    public void currentlyGeneratedIncome(List<RentedCar> currentlyRented) {
-
+    public int currentlyGeneratedIncome(List<RentedCar> currentlyRented) {
+        int currentIncome=0;
+        for (RentedCar rentedCar:currentlyRented){
+            currentIncome+=rentedCar.getRentPriceAfterDiscount();
+        }
+        return currentIncome;
     }
 
     @Override

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface StatisticsService {
 
-    void currentlyGeneratedIncome(List<RentedCar> currentlyRented);
+    int currentlyGeneratedIncome(List<RentedCar> currentlyRented);
 
     void highestIncomeGenerated(Client client);
 

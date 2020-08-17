@@ -25,7 +25,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Salesman logOutSalesmant(Salesman salesman) {
+    public Salesman logOutSalesman(Salesman salesman) {
         return null;
     }
 

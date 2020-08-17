@@ -18,13 +18,13 @@ public class RentalShop {
     private static final Scanner sc = new Scanner(System.in);
     private List<User> listOfUsers;
     private List<Car> listOfCars;
-    RentalList rentalList= new RentalList();
+    RentalList rentalList = new RentalList();
     List<RentedCar> rentedCars = new ArrayList<>(rentalList.getRentalList());
-
 
     private AuthService authService = new AuthServiceImpl();
     private SearchService searchService = new SearchServiceImpl();
     private RentService rentService = new RentServiceImpl();
+    private StatisticsService statistics = new StatisticsServiceImpl();
 
     private Salesman loggedInSalesman;
     private Client loggedInClient;
@@ -65,7 +65,9 @@ public class RentalShop {
                             showRentedCars();
                             break;
                         case 3:
-                            System.out.println(3);
+                            //current income based on rented cars
+                            int currentIncome = statistics.currentlyGeneratedIncome(rentedCars);
+                            System.out.println("Current rented cars are generating an income of " + currentIncome + ".");
                             break;
                         case 4:
                             System.out.println(4);
@@ -78,11 +80,11 @@ public class RentalShop {
                             break;
                         case 7:
                             //log out
-                            loggedInSalesman=authService.logOutSalesmant(loggedInSalesman);
+                            loggedInSalesman = authService.logOutSalesman(loggedInSalesman);
                             break;
                         case 8:
-                            loggedInSalesman=authService.logOutSalesmant(loggedInSalesman);
-                            exitApp=authService.doExitApp();
+                            loggedInSalesman = authService.logOutSalesman(loggedInSalesman);
+                            exitApp = authService.doExitApp();
                             break;
                         default:
                             printError();
@@ -131,14 +133,14 @@ public class RentalShop {
                                 if (rentService.validateDepositForRent(loggedInClient, tempCar)) {
                                     System.out.println("Conditions met!");
                                     System.out.println("Please enter number of days for rental : ");
-                                    LocalDate pickUpDate=LocalDate.now();
+                                    LocalDate pickUpDate = LocalDate.now();
                                     int nrOfDays = sc.nextInt();
-                                    LocalDate returnDate=pickUpDate.plusDays(nrOfDays);
+                                    LocalDate returnDate = pickUpDate.plusDays(nrOfDays);
                                     int finalPrice = rentService.calculateFinalRentPrice(tempCar, nrOfDays);
                                     System.out.println("For your rent you will have to pay " + finalPrice + ".");
                                     rentService.rentCar(listOfCars, loggedInClient, tempCar);
                                     System.out.println("Car successfully rented!");
-                                    rentedCars.add(rentService.rentedCar(tempCar, loggedInClient, finalPrice, pickUpDate,returnDate));
+                                    rentedCars.add(rentService.rentedCar(tempCar, loggedInClient, finalPrice, pickUpDate, returnDate));
                                 }
                             }
                             break;
@@ -318,7 +320,7 @@ public class RentalShop {
         for (RentedCar rentedCar : rentedCars) {
             System.out.println(rentedCar.getRentedCar());
             System.out.println("Rented by : " + rentedCar.getClient().getFullName());
-            System.out.println("Car rented from " + rentedCar.getRentDate()+ " to "+rentedCar.getReturnDate()+".");
+            System.out.println("Car rented from " + rentedCar.getRentDate() + " to " + rentedCar.getReturnDate() + ".");
         }
 
     }

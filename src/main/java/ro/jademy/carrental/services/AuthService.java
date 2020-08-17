@@ -12,7 +12,7 @@ public interface AuthService {
 
     Client logOutClient(Client client);
 
-    Salesman logOutSalesmant(Salesman salesman);
+    Salesman logOutSalesman(Salesman salesman);
 
     boolean doExitApp();
 }
