@@ -3,26 +3,31 @@ package ro.jademy.carrental.models.users;
 import ro.jademy.carrental.models.RentedCar;
 import ro.jademy.carrental.models.cars.Car;
 
-
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Client extends User {
 
-    private String licenceIssueDate;
+    private LocalDate licenceIssueDate;
     private int deposit;
     private Car currentlyRentedCar;
     private List<RentedCar> rentalHistory;
 
-    public Client(String firstName, String lastName, String userName, String userPassword, String licenceIssueDate) {
+    public Client(String firstName, String lastName, String userName, String userPassword, LocalDate licenceIssueDate) {
         super(firstName, lastName, userName, userPassword);
-        this.licenceIssueDate=licenceIssueDate;
-        this.rentalHistory=new ArrayList<>();
+        this.licenceIssueDate = licenceIssueDate;
+        this.rentalHistory = new ArrayList<>();
     }
 
-    public String getLicenceIssueDate() {
+    public LocalDate getLicenceIssueDate() {
         return licenceIssueDate;
     }
+
+    public void setLicenceIssueDate(LocalDate licenceIssueDate) {
+        this.licenceIssueDate = licenceIssueDate;
+    }
+
 
     public int getDeposit() {
         return deposit;
@@ -40,9 +45,6 @@ public class Client extends User {
         this.rentalHistory = rentalHistory;
     }
 
-    public void setLicenceIssueDate(String licenceIssueDate) {
-        this.licenceIssueDate = licenceIssueDate;
-    }
 
     public Car getCurrentlyRentedCar() {
         return currentlyRentedCar;
@@ -50,5 +52,9 @@ public class Client extends User {
 
     public void setCurrentlyRentedCar(Car currentlyRentedCar) {
         this.currentlyRentedCar = currentlyRentedCar;
+    }
+
+    public String getFullName() {
+        return getFirstName() + " " + getLastName();
     }
 }

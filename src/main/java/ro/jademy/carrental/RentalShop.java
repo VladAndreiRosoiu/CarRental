@@ -1,13 +1,13 @@
 package ro.jademy.carrental;
 
+import ro.jademy.carrental.data.RentalList;
 import ro.jademy.carrental.models.RentedCar;
-import ro.jademy.carrental.models.users.Salesman;
 import ro.jademy.carrental.models.cars.Car;
 import ro.jademy.carrental.models.users.Client;
+import ro.jademy.carrental.models.users.Salesman;
 import ro.jademy.carrental.models.users.User;
+import ro.jademy.carrental.services.*;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -17,10 +17,17 @@ public class RentalShop {
     private static final Scanner sc = new Scanner(System.in);
     private List<User> listOfUsers;
     private List<Car> listOfCars;
+    RentalList rentalList= new RentalList();
+    List<RentedCar> rentedCars = new ArrayList<>(rentalList.getRentalList());
+
+
+    private AuthService authService = new AuthServiceImpl();
+    private SearchService searchService = new SearchServiceImpl();
+    private RentService rentService = new RentServiceImpl();
+
     private Salesman loggedInSalesman;
     private Client loggedInClient;
-    private RentedCar rentedCar = new RentedCar();
-    private List<RentedCar> rentedCars = new ArrayList<>();
+
 
     public RentalShop(List<User> userList, List<Car> carList) {
         this.listOfUsers = userList;
@@ -31,137 +38,150 @@ public class RentalShop {
 
         int menuChoice;
         String keyword;
-
-        showWelcome();
-        System.out.println("Please enter username:");
-        String userName = sc.next();
-        System.out.println("Please enter password:");
-        String userPassword = sc.next();
-        doLogin(userName, userPassword);
+        boolean exitApp;
 
         do {
-            if (loggedInSalesman != null) {
-                showSalesmanMenu();
-                System.out.println("Please enter choice:");
-                menuChoice = sc.nextInt();
-                switch (menuChoice) {
-                    case 1:
-                        System.out.println(1);
-                        break;
-                    case 2:
-                        System.out.println(2);
-                        break;
-                    case 3:
-                        System.out.println(3);
-                        break;
-                    case 4:
-                        System.out.println(4);
-                        break;
-                    case 5:
-                        System.out.println(5);
-                        break;
-                    case 6:
-                        System.out.println(6);
-                        break;
-                    case 7:
-                        System.out.println(7);
-                        break;
-                    case 8:
-                        System.out.println(8);
-                        break;
-                    case 9:
-                        System.out.println(9);
-                        break;
-                    default:
-                        System.out.println("default");
-                        break;
-                }
-            }
-            if (loggedInClient != null) {
-                showClientMenu();
-                System.out.println("Please enter choice:");
-                menuChoice = sc.nextInt();
-                switch (menuChoice) {
-                    case 1:
-                        showAllCars();
-                        break;
-                    case 2:
-                        //showAllAvailableCars();
-                        break;
-                    case 3:
-                        System.out.println(3);
-                        showFilterMenuOptions();
-                        menuChoice = sc.nextInt();
-                        filterCars(menuChoice);
-                        break;
-                    case 4:
-                        System.out.println("Please enter car  UUID:");
-                        keyword = sc.next();
-                        Car tempCar = filterCarByUUID(keyword);
-                        if (validateDriverLicence(tempCar)) {
-                            showDepositInformation();
-                            int deposit = sc.nextInt();
-                            doDepositForRent(deposit);
-                            if (validateDeposit(tempCar)) {
-                                System.out.println("Please enter number of days:");
-                                int nrOfDays = sc.nextInt();
-                                System.out.println("For the selected car and desired period you will have to pay " + calculateRentPrice(tempCar, nrOfDays));
-                                rentCar(tempCar);
-                                System.out.println("You have successfully rented " + tempCar);
-                                rentedCars.add(createRentedCar(tempCar, calculateRentPrice(tempCar, nrOfDays)));
-                            } else {
-                                System.out.println("Your deposit is not equal to minimum amount required to rent desired car!");
-                            }
-                        } else {
-                            System.out.println("Driving licence issue date not meeting minimum requirements!");
-                        }
-                        break;
-                    case 5:
-                        showRentedCar();
-                        break;
-                    case 6:
-                        RentedCar rented = new RentedCar();
-                        for (RentedCar rentedCar : rentedCars) {
-                            if (rentedCar.getClient().getUserName().equals(loggedInClient.getUserName()) &&
-                                    rentedCar.getRentedCar().equals(loggedInClient.getCurrentlyRentedCar())) {
-                                rented = rentedCar;
-                            }
-                        }
-                        System.out.println("Before returning the car you will have to pay: " + rented.getRentPricePerDay());
-                        int paid = sc.nextInt();
-                        if (paid == rented.getRentPricePerDay()) {
-                            returnRentedCar();
-                            System.out.println(rentedCars.size());
-                            for (RentedCar rentedCar : loggedInClient.getRentalHistory()) {
-                                System.out.println(rentedCar.getRentedCar());
-                            }
-                            System.out.println("Deposit refunded!");
-                        }
+            exitApp = false;
+            showWelcome();
+            System.out.println("Please enter username:");
+            String userName = sc.next();
+            System.out.println("Please enter password:");
+            String userPassword = sc.next();
+            setCurrentUser(userName, userPassword);
 
-                        break;
-                    case 7:
-                        doLogOut();
-                        break;
-                    case 8:
-                        //do exit
-                        break;
-                    default:
-                        System.out.println("default");
-                        break;
+            do {
+                if (loggedInSalesman != null) {
+                    showSalesmanMenu();
+                    System.out.println("Please enter choice:");
+                    menuChoice = sc.nextInt();
+                    switch (menuChoice) {
+                        case 1:
+                            //print all cars
+                            showAllCars();
+                            break;
+                        case 2:
+                            //show currently rented cars
+                            showRentedCars();
+                            break;
+                        case 3:
+                            System.out.println(3);
+                            break;
+                        case 4:
+                            System.out.println(4);
+                            break;
+                        case 5:
+                            System.out.println(5);
+                            break;
+                        case 6:
+                            System.out.println(6);
+                            break;
+                        case 7:
+                            //log out
+                            loggedInSalesman=authService.logOutSalesmant(loggedInSalesman);
+                            break;
+                        case 8:
+                            loggedInSalesman=authService.logOutSalesmant(loggedInSalesman);
+                            exitApp=authService.doExitApp();
+                            break;
+                        default:
+                            printError();
+                            break;
+                    }
                 }
-            }
-        } while (loggedInClient != null || loggedInSalesman != null);
+                if (loggedInClient != null) {
+                    showClientMenu();
+                    System.out.println("Please enter choice:");
+                    menuChoice = sc.nextInt();
+                    switch (menuChoice) {
+                        case 1:
+                            showAllCars();
+                            break;
+                        case 2:
+                            showFilterMenuOptions();
+                            System.out.println("Please enter your choice:");
+                            menuChoice = sc.nextInt();
+                            if (menuChoice == 3) {
+                                System.out.println("Please enter lowest price:");
+                                int lowestPrice = sc.nextInt();
+                                System.out.println("Please enter highest price:");
+                                int highestPrice = sc.nextInt();
+                                doFilterByBudget(lowestPrice, highestPrice);
+                            } else {
+                                System.out.println("Please enter search criteria:");
+                                keyword = sc.next().toLowerCase();
+                                doFilter(menuChoice, keyword);
+                            }
+                            break;
+                        case 3:
+                            //rent car
+                            System.out.println("Please enter UUID of the car you want to rent:");
+                            String uuid = sc.next();
+                            Car tempCar = searchService.searchCarByUUID(listOfCars, uuid);
+                            if (rentService.validateDriverLicence(loggedInClient, tempCar)) {
+                                System.out.println("Driving licence conditions met!");
+                                showDepositInformation(tempCar);
+                                int deposit = sc.nextInt();
+                                if (doDepositForRent(deposit)) {
+                                    System.out.println("You have deposited " + deposit + "!");
+                                } else {
+                                    System.out.println("You cannot deposit " + deposit + "!");
+                                }
+
+                                if (rentService.validateDepositForRent(loggedInClient, tempCar)) {
+                                    System.out.println("Conditions met!");
+                                    System.out.println("Please enter number of days for rental : ");
+                                    int nrOfDays = sc.nextInt();
+                                    int finalPrice = rentService.calculateFinalRentPrice(tempCar, nrOfDays);
+                                    System.out.println("For your rent you will have to pay " + finalPrice + ".");
+                                    rentService.rentCar(listOfCars, loggedInClient, tempCar);
+                                    System.out.println("Car successfully rented!");
+                                    rentedCars.add(rentService.rentedCar(tempCar, loggedInClient, finalPrice));
+                                }
+                            }
+                            break;
+                        case 4:
+                            showRentedCar();
+                            break;
+                        case 5:
+                            //return rented car
+                            RentedCar tempRentedCar = new RentedCar();
+                            for (RentedCar rentedCar : rentedCars) {
+                                if (rentedCar.getRentedCar().equals(loggedInClient.getCurrentlyRentedCar()) && rentedCar.getClient().equals(loggedInClient)) {
+                                    tempRentedCar = rentedCar;
+                                }
+                            }
+                            System.out.println("To return the rented car, first you will have to pay : " + tempRentedCar.getRentPriceAfterDiscount());
+                            int payed = sc.nextInt();
+                            if (rentService.validatePayedAmount(payed, rentedCars, loggedInClient)) {
+                                rentService.returnRentedCar(listOfCars, rentedCars, loggedInClient);
+                                System.out.println("Car successfully returned!");
+                                System.out.println("Deposit refunded!");
+                                System.out.println(loggedInClient.getDeposit());
+                            }
+
+                            break;
+                        case 6:
+                            //log out
+                            loggedInClient = authService.logOutClient(loggedInClient);
+                            System.out.println("Logged out!");
+                            break;
+                        case 7:
+                            //exit app
+                            loggedInClient = authService.logOutClient(loggedInClient);
+                            exitApp = authService.doExitApp();
+                            System.out.println("Exited application!");
+                            break;
+                        default:
+                            printError();
+                            break;
+                    }
+                }
+            } while (loggedInClient != null || loggedInSalesman != null);
+        } while (!exitApp);
 
     }
 
     //_____________________________________General use related methods__________________________________________________
-
-    private void showWelcome() {
-        System.out.println(" -----------------------------------------------");
-        System.out.println("|    Welcome to the Car Rental Shop   |");
-        System.out.println(" -----------------------------------------------");
-        System.out.println();
-    }
 
     private void showFilterMenuOptions() {
 
@@ -175,38 +195,49 @@ public class RentalShop {
 
     }
 
-    private User validateLogIn(String userName, String userPassword) {
-        for (User user : listOfUsers) {
-            if (user.getUserName().equals(userName)) {
-                if (user.getUserPassword().equals(userPassword)) {
-                    return user;
-                }
-            }
+    private void printError() {
+        System.out.println("Unknown choice!");
+    }
+
+    private void doFilter(int choice, String keyword) {
+        switch (choice) {
+            case 1:
+                printFiltered(searchService.searchCarByMake(listOfCars, keyword));
+                break;
+            case 2:
+                printFiltered(searchService.searchCarByModel(listOfCars, keyword));
+                break;
+            case 4:
+                break;
+            default:
+                printError();
+                break;
         }
-        return null;
     }
 
-    private void doLogin(String userName, String userPassword) {
-        if (validateLogIn(userName, userPassword) instanceof Salesman) {
-            loggedInSalesman = (Salesman) validateLogIn(userName, userPassword);
-        } else if (validateLogIn(userName, userPassword) instanceof Client) {
-            loggedInClient = (Client) validateLogIn(userName, userPassword);
+    private void doFilterByBudget(int lowestPrice, int highestPrice) {
+        printFiltered(searchService.searchCarByPriceRange(listOfCars, lowestPrice, highestPrice));
+    }
+
+    void printFiltered(List<Car> carList) {
+        for (Car car : carList) {
+            System.out.println(car);
         }
     }
 
-    private void doLogOut() {
-
-        //logs out the current user
-        loggedInClient = null;
-        loggedInSalesman = null;
-        System.out.println("Goodbye!");
-
+    private void showWelcome() {
+        System.out.println(" -----------------------------------------------");
+        System.out.println("|    Welcome to the Car Rental Shop   |");
+        System.out.println(" -----------------------------------------------");
+        System.out.println();
     }
 
-    private void existShop() {
-
-        //exist app
-
+    private void setCurrentUser(String userName, String userPassword) {
+        if (authService.doLogin(listOfUsers, userName, userPassword) instanceof Salesman) {
+            loggedInSalesman = (Salesman) authService.doLogin(listOfUsers, userName, userPassword);
+        } else if (authService.doLogin(listOfUsers, userName, userPassword) instanceof Client) {
+            loggedInClient = (Client) authService.doLogin(listOfUsers, userName, userPassword);
+        }
     }
 
     private void showAllCars() {
@@ -218,155 +249,39 @@ public class RentalShop {
         }
     }
 
-    private void filterCars(int option) {
-
-        String keyword;
-        int lowestPrice, highestPrice;
-
-        switch (option) {
-            case 1:
-                System.out.println("Please enter desired make:");
-                keyword = sc.next();
-                System.out.println(filterCarsByMake(keyword));
-                break;
-            case 2:
-                System.out.println("Please enter desired model:");
-                keyword = sc.next();
-                System.out.println(filterCarsByModel(keyword));
-            case 3:
-                System.out.println("Please enter lowest price:");
-                lowestPrice = sc.nextInt();
-                System.out.println("Please enter highest price:");
-                highestPrice = sc.nextInt();
-                System.out.println(filterCarsByBudget(lowestPrice, highestPrice));
-                break;
-            default:
-                System.out.println("Option not found!");
-                break;
-        }
-    }
-
-    private Car filterCarsByMake(String keyword) {
-        for (Car car : listOfCars) {
-            if (car.getMake().equals(keyword)) {
-                return car;
-            }
-        }
-        return null;
-    }
-
-    private Car filterCarsByModel(String keyword) {
-        for (Car car : listOfCars) {
-            if (car.getModel().equals(keyword)) {
-                return car;
-            }
-        }
-        return null;
-    }
-
-    private Car filterCarsByBudget(int lowestPrice, int highestPrice) {
-        for (Car car : listOfCars) {
-            if (car.getRentPricePerDay() >= lowestPrice && car.getRentPricePerDay() <= highestPrice) {
-                return car;
-            }
-        }
-        return null;
-    }
-
-    private Car filterCarByUUID(String uuid) {
-        for (Car car : listOfCars) {
-            if (car.getUUID().equals(uuid)) {
-                return car;
-            }
-        }
-        return null;
-    }
-
-    public void calculatePrice(int numberOfDays) {
-        // TODO: apply a discount to the base price of a car based on the number of rental days
-        // TODO: document the implemented discount algorithm
-
-        // TODO: for a more difficult algorithm, change this method to include date intervals and take into account
-        //       weekdays and national holidays in which the discount should be smaller
-
-        // Q: what should be the return type of this method?
-    }
-
     //____________________________________________Client related methods________________________________________________
 
-    private void showDepositInformation() {
-        System.out.println("To rent a car, you need to make a deposit first.");
-        System.out.println("For a category one car you need to deposit at least 100.");
-        System.out.println("For a category two car you need to deposit at least 200.");
-        System.out.println("For a category three car you need to deposit at least 300.");
-        System.out.println("For a category four car you need to deposit at least 400.");
-        System.out.println("Please deposit the correct amount for rented car.");
+    private void showDepositInformation(Car car) {
+        System.out.println("To rent a car, you need to make a deposit first!");
+        System.out.println("Your deposit will be refunded when you return the car! ");
+        if (car.getRentCategory() == 1) {
+            System.out.println("For a category one car you need to deposit at least 100.");
+        } else if (car.getRentCategory() == 2) {
+            System.out.println("For a category two car you need to deposit at least 200.");
+        } else if (car.getRentCategory() == 3) {
+            System.out.println("For a category three car you need to deposit at least 300.");
+        } else {
+            System.out.println("For a category four car you need to deposit at least 400.");
+        }
     }
 
     private void showClientMenu() {
         System.out.println("                    MAIN MENU                   ");
         System.out.println("1. List all cars");
-        System.out.println("2. List all available cars");
-        System.out.println("3. Filter car list by:");
-        System.out.println("4. Rent car");
-        System.out.println("5. Show rented car");
-        System.out.println("6. Return rented car");
-        System.out.println("5. Logout");
-        System.out.println("6. Exit");
+        System.out.println("2. Filter car list by:");
+        System.out.println("3. Rent car");
+        System.out.println("4. Show rented car");
+        System.out.println("5. Return rented car");
+        System.out.println("6. Logout");
+        System.out.println("7. Exit");
     }
 
-    private boolean validateDriverLicence(Car car) {
-
-        LocalDate currentDate = LocalDate.now();
-        LocalDate dateToRentCategoryOneCar = currentDate.minusYears(1);
-        LocalDate dateToRentCategoryTwoCar = currentDate.minusYears(2);
-        LocalDate dateToRentCategoryThreeCar = currentDate.minusYears(3);
-        LocalDate dateToRentCategoryFourCar = currentDate.minusYears(3);
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
-        LocalDate driverLicenceIssueDate = LocalDate.parse(loggedInClient.getLicenceIssueDate(), formatter);
-
-        if (car.getRentCategory() == 1) {
-            return driverLicenceIssueDate.isBefore(dateToRentCategoryOneCar);
-        } else if (car.getRentCategory() == 2) {
-            return driverLicenceIssueDate.isBefore(dateToRentCategoryTwoCar);
-        } else if (car.getRentCategory() == 3) {
-            return driverLicenceIssueDate.isBefore(dateToRentCategoryThreeCar);
-        } else if (car.getRentCategory() == 4) {
-            return driverLicenceIssueDate.isBefore(dateToRentCategoryFourCar);
+    private boolean doDepositForRent(int deposit) {
+        if (deposit != 0) {
+            loggedInClient.setDeposit(deposit);
+            return true;
         }
         return false;
-    }
-
-    private void doDepositForRent(int deposit) {
-        loggedInClient.setDeposit(deposit);
-
-    }
-
-    private boolean validateDeposit(Car car) {
-        if (car.getRentCategory() == 1 && loggedInClient.getDeposit() >= 100) {
-            return true;
-        } else if (car.getRentCategory() == 2 && loggedInClient.getDeposit() >= 200) {
-            return true;
-        } else if (car.getRentCategory() == 3 && loggedInClient.getDeposit() >= 300) {
-            return true;
-        } else return car.getRentCategory() == 4 && loggedInClient.getDeposit() >= 400;
-    }
-
-    private void rentCar(Car car) {
-        if (validateDriverLicence(car)) {
-            if (validateDeposit(car)) {
-                loggedInClient.setCurrentlyRentedCar(car);
-                listOfCars.remove(car);
-            }
-        }
-    }
-
-    private RentedCar createRentedCar(Car car, int price) {
-        rentedCar.setRentedCar(car);
-        rentedCar.setClient(loggedInClient);
-        rentedCar.setRentPricePerDay(price);
-        return rentedCar;
     }
 
     private void showRentedCar() {
@@ -378,103 +293,31 @@ public class RentalShop {
         }
     }
 
-    private void returnRentedCar() {
-        RentedCar rented = new RentedCar();
-        for (RentedCar rentedCar : rentedCars) {
-            if (rentedCar.getClient().getUserName().equals(loggedInClient.getUserName()) &&
-                    rentedCar.getRentedCar().equals(loggedInClient.getCurrentlyRentedCar())) {
-                rented = rentedCar;
-            }
-        }
-        loggedInClient.getRentalHistory().add(rented);
-        listOfCars.add(rented.getRentedCar());
-        rentedCars.remove(rented);
-        loggedInClient.setCurrentlyRentedCar(null);
-
-        //returning rented car
-        //getting the amount deposited back and paying to cost to rent the car
-    }
-
-    private int calculateRentPrice(Car car, int rentDays) {
-        if (car.getRentCategory() == 1) {
-            if (rentDays > 10) {
-                return (car.getRentPricePerDay() - 2) * rentDays;
-            } else {
-                return car.getRentPricePerDay() * rentDays;
-            }
-        }
-        if (car.getRentCategory() == 2) {
-            if (rentDays > 10) {
-                return (car.getRentPricePerDay() - 4) * rentDays;
-            } else {
-                return car.getRentPricePerDay() * rentDays;
-            }
-        }
-        if (car.getRentCategory() == 3) {
-            if (rentDays > 10) {
-                return (car.getRentPricePerDay() - 10) * rentDays;
-            } else {
-                return car.getRentPricePerDay() * rentDays;
-            }
-        }
-        if (car.getRentCategory() == 4) {
-            if (rentDays > 10) {
-                return (car.getRentPricePerDay() - 15) * rentDays;
-            } else {
-                return car.getRentPricePerDay() * rentDays;
-            }
-        }
-        return 0;
-    }
 
     //__________________________________________Salesman related methods_______________________________________________
 
     private void showSalesmanMenu() {
         System.out.println("                    MAIN MENU                   ");
         System.out.println("1. List all cars");
-        System.out.println("2. List available cars");
-        System.out.println("3. List rented cars");
-        System.out.println("4. Check income");
-        System.out.println("5. List all users");
-        System.out.println("6. Add user");
-        System.out.println("7. Add / remove car");
-        System.out.println("8. Logout");
-        System.out.println("9. Exit");
+        System.out.println("2. List currently rented cars");
+        System.out.println("3. Current income");
+        System.out.println("4. Highest income generated by client");
+        System.out.println("5. Most rented car");
+        System.out.println("6. User with most rentals");
+        System.out.println("7. Logout");
+        System.out.println("8. Exit");
     }
 
     private void showRentedCars() {
 
         //displays cars that are rented
         //must display also by who the car is rented, and the period
+        for (RentedCar rentedCar : rentedCars) {
+            System.out.println(rentedCar.getRentedCar());
+            System.out.println("Rented by : " + rentedCar.getClient().getFullName());
+            System.out.println("Car rented for " + "days.");
+        }
 
-    }
-
-    private void checkIncome() {
-
-        //calculates current income from rented cars at the moment
-
-    }
-
-    private void showAllClients() {
-
-        //displays the list of clients
-        //displays the history of a specific client
-
-    }
-
-    private void addNewClient() {
-
-        //this method allows the salesman to add new client
-    }
-
-    private void addNewCar() {
-
-        //this method allows the salesman to add a new car
-    }
-
-    private void removeCar() {
-
-        //this method allows the salesman to remove a car from the list
     }
 
 }

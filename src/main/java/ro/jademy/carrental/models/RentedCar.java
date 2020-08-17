@@ -3,12 +3,24 @@ package ro.jademy.carrental.models;
 import ro.jademy.carrental.models.cars.Car;
 import ro.jademy.carrental.models.users.Client;
 
+import java.time.LocalDate;
+
 
 public class RentedCar {
 
     private Car rentedCar;
     private Client client;
-    private int rentPricePerDay;
+    private LocalDate rentDate;
+    private LocalDate returnDate;
+    private int rentPriceAfterDiscount;
+
+    public RentedCar(){}
+
+    public RentedCar(Car rentedCar, Client client, int rentPriceAfterDiscount){
+        this.rentedCar=rentedCar;
+        this.client=client;
+        this.rentPriceAfterDiscount = rentPriceAfterDiscount;
+    }
 
     public Car getRentedCar() {
         return rentedCar;
@@ -26,11 +38,27 @@ public class RentedCar {
         this.client = client;
     }
 
-    public int getRentPricePerDay() {
-        return rentPricePerDay;
+    public LocalDate getRentDate() {
+        return rentDate;
     }
 
-    public void setRentPricePerDay(int rentPricePerDay) {
-        this.rentPricePerDay = rentPricePerDay;
+    public void setRentDate(LocalDate rentDate) {
+        this.rentDate = rentDate;
+    }
+
+    public LocalDate getReturnDate() {
+        return returnDate;
+    }
+
+    public void setReturnDate(LocalDate returnDate) {
+        this.returnDate = returnDate;
+    }
+
+    public int getRentPriceAfterDiscount() {
+        return rentPriceAfterDiscount;
+    }
+
+    public void setRentPriceAfterDiscount(int rentPriceAfterDiscount) {
+        this.rentPriceAfterDiscount = rentPriceAfterDiscount;
     }
 }

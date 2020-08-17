@@ -1,7 +1,7 @@
 package ro.jademy.carrental.models.cars;
 
 
-public  abstract class Car {
+public abstract class Car {
     private String UUID;
     private String make;
     private String model;
@@ -9,17 +9,15 @@ public  abstract class Car {
     private int rentPricePerDay;
     private int seatNumber;
     private String fuelType;
-    private boolean isCarRented;
 
-    public Car(String make, String model, int rentCategory, int rentPricePerDay, int seatNumber, String fuelType, boolean isCarRented) {
-        this.UUID= java.util.UUID.randomUUID().toString();
+    public Car(String make, String model, int rentCategory, int rentPricePerDay, int seatNumber, String fuelType) {
+        this.UUID = java.util.UUID.randomUUID().toString();
         this.make = make;
         this.model = model;
         this.rentCategory = rentCategory;
         this.rentPricePerDay = rentPricePerDay;
         this.seatNumber = seatNumber;
         this.fuelType = fuelType;
-        this.isCarRented=isCarRented;
     }
 
     public String getUUID() {
@@ -74,20 +72,12 @@ public  abstract class Car {
         this.fuelType = fuelType;
     }
 
-    public boolean isCarRented() {
-        return isCarRented;
-    }
-
-    public void setCarRented(boolean carRented) {
-        isCarRented = carRented;
-    }
-
     @Override
     public String toString() {
-        return "Make: "+make+
-                ", Model: " + model+
-                ", rent category "+rentCategory+
-                ", having a standard rent price per day of "+rentPricePerDay+
-                ", with UUID "+ getUUID();
+        return "Make: " + make +
+                ", Model: " + model +
+                ", rent category " + rentCategory +
+                ", having a standard rent price per day of " + rentPricePerDay +
+                ", with UUID " + getUUID();
     }
 }
