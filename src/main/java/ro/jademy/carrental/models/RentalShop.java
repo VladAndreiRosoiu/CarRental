@@ -1,7 +1,6 @@
-package ro.jademy.carrental;
+package ro.jademy.carrental.models;
 
 import ro.jademy.carrental.data.RentalList;
-import ro.jademy.carrental.models.RentedCar;
 import ro.jademy.carrental.models.cars.Car;
 import ro.jademy.carrental.models.users.Client;
 import ro.jademy.carrental.models.users.Salesman;

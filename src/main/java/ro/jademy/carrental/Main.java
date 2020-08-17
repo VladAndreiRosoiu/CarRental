@@ -1,6 +1,8 @@
 package ro.jademy.carrental;
 
 
+import ro.jademy.carrental.models.RentalShop;
+
 public class Main {
     public static void main(String[] args) {
 
