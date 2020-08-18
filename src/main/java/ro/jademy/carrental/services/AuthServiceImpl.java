@@ -29,7 +29,6 @@ public class AuthServiceImpl implements AuthService {
         return null;
     }
 
-
     @Override
     public boolean doExitApp() {
         return true;

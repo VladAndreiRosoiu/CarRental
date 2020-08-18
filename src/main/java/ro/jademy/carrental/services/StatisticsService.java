@@ -2,16 +2,17 @@ package ro.jademy.carrental.services;
 
 import ro.jademy.carrental.models.RentedCar;
 import ro.jademy.carrental.models.users.Client;
+import ro.jademy.carrental.models.users.User;
 
 import java.util.List;
 
 public interface StatisticsService {
 
-    int currentlyGeneratedIncome(List<RentedCar> currentlyRented);
+    int calculateCurrentIncome(List<RentedCar> currentlyRented);
 
-    void highestIncomeGenerated(Client client);
+    int calculateHighestIncomeGenerated(List<User> users);
 
-    void mostRentedCar(List<Client> clients);
+    void doMostRentedCar(List<Client> clients);
 
-    void userWithMostRentals(List<Client> clients);
+    void doClientWithMostRentals(List<Client> clients);
 }

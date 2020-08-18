@@ -12,13 +12,13 @@ public class RentedCar {
     private Client client;
     private LocalDate rentDate;
     private LocalDate returnDate;
-    private int rentPriceAfterDiscount;
+    private int finalTotalRentPrice;
 
     public RentedCar(){}
-    public RentedCar(Car rentedCar, Client client, int rentPriceAfterDiscount, LocalDate rentDate, LocalDate returnDate){
+    public RentedCar(Car rentedCar, Client client, int finalTotalRentPrice, LocalDate rentDate, LocalDate returnDate){
         this.rentedCar=rentedCar;
         this.client=client;
-        this.rentPriceAfterDiscount = rentPriceAfterDiscount;
+        this.finalTotalRentPrice = finalTotalRentPrice;
         this.rentDate=rentDate;
         this.returnDate=returnDate;
     }
@@ -55,11 +55,11 @@ public class RentedCar {
         this.returnDate = returnDate;
     }
 
-    public int getRentPriceAfterDiscount() {
-        return rentPriceAfterDiscount;
+    public int getFinalTotalRentPrice() {
+        return finalTotalRentPrice;
     }
 
-    public void setRentPriceAfterDiscount(int rentPriceAfterDiscount) {
-        this.rentPriceAfterDiscount = rentPriceAfterDiscount;
+    public void setFinalTotalRentPrice(int finalTotalRentPrice) {
+        this.finalTotalRentPrice = finalTotalRentPrice;
     }
 }

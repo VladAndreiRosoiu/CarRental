@@ -77,7 +77,7 @@ public class RentServiceImpl implements RentService {
         rentedCar.setClient(client);
         rentedCar.setRentDate(pickUpDate);
         rentedCar.setReturnDate(returnDate);
-        rentedCar.setRentPriceAfterDiscount(rentPrice);
+        rentedCar.setFinalTotalRentPrice(rentPrice);
         return rentedCar;
     }
 
@@ -85,7 +85,7 @@ public class RentServiceImpl implements RentService {
     public boolean validatePayedAmount(int payed, List<RentedCar> currentlyRentedCars, Client client) {
         for (RentedCar rentedCar : currentlyRentedCars) {
             if (rentedCar.getClient().getUserName().equals(client.getUserName()) &&
-                    rentedCar.getRentedCar().equals(client.getCurrentlyRentedCar()) && payed == rentedCar.getRentPriceAfterDiscount()) {
+                    rentedCar.getRentedCar().equals(client.getCurrentlyRentedCar()) && payed == rentedCar.getFinalTotalRentPrice()) {
                 return true;
             }
         }
