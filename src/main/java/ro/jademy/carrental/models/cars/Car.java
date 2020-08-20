@@ -1,6 +1,8 @@
 package ro.jademy.carrental.models.cars;
 
 
+import org.apache.commons.lang3.StringUtils;
+
 public abstract class Car {
     private String UUID;
     private String make;
@@ -74,10 +76,13 @@ public abstract class Car {
 
     @Override
     public String toString() {
-        return "Make: " + make +
-                ", Model: " + model +
-                ", rent category " + rentCategory +
-                ", having a standard rent price per day of " + rentPricePerDay +
-                ", with UUID " + getUUID();
+        return StringUtils.center(make, 13, " ") +
+                StringUtils.center(model, 13, " ") +
+                StringUtils.center(String.valueOf(fuelType), 20, " ") +
+                StringUtils.center(String.valueOf(rentCategory), 20, ' ') +
+                StringUtils.center(String.valueOf(rentPricePerDay), 20, " ") +
+                StringUtils.center(String.valueOf(seatNumber), 20, " ") +
+                StringUtils.center(UUID, 25, " ");
+
     }
 }
