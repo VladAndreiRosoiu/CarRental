@@ -3,6 +3,7 @@ package ro.jademy.carrental.models;
 import org.apache.commons.lang3.StringUtils;
 import ro.jademy.carrental.data.RentalList;
 import ro.jademy.carrental.models.cars.Car;
+import ro.jademy.carrental.models.cars.RentCategory;
 import ro.jademy.carrental.models.users.Client;
 import ro.jademy.carrental.models.users.Salesman;
 import ro.jademy.carrental.models.users.User;
@@ -235,11 +236,11 @@ public class RentalShop {
     private void showDepositInformation(Car car) {
         System.out.println("To rent a car, you need to make a deposit first!");
         System.out.println("Your deposit will be refunded when you return the car! ");
-        if (car.getRentCategory() == 1) {
+        if (car.getRentCategory()== RentCategory.ONE) {
             System.out.println("For a category one car you need to deposit at least 100.");
-        } else if (car.getRentCategory() == 2) {
+        } else if (car.getRentCategory()== RentCategory.TWO) {
             System.out.println("For a category two car you need to deposit at least 200.");
-        } else if (car.getRentCategory() == 3) {
+        } else if (car.getRentCategory()== RentCategory.THREE) {
             System.out.println("For a category three car you need to deposit at least 300.");
         } else {
             System.out.println("For a category four car you need to deposit at least 400.");

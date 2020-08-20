@@ -7,19 +7,20 @@ public abstract class Car {
     private String UUID;
     private String make;
     private String model;
-    private int rentCategory;
     private int rentPricePerDay;
     private int seatNumber;
     private String fuelType;
+    private RentCategory rentCategory;
 
-    public Car(String make, String model, int rentCategory, int rentPricePerDay, int seatNumber, String fuelType) {
+
+    public Car(String make, String model, int rentPricePerDay, int seatNumber, String fuelType, RentCategory rentCategory) {
         this.UUID = java.util.UUID.randomUUID().toString();
         this.make = make;
         this.model = model;
-        this.rentCategory = rentCategory;
         this.rentPricePerDay = rentPricePerDay;
         this.seatNumber = seatNumber;
         this.fuelType = fuelType;
+        this.rentCategory = rentCategory;
     }
 
     public String getUUID() {
@@ -40,14 +41,6 @@ public abstract class Car {
 
     public void setModel(String model) {
         this.model = model;
-    }
-
-    public int getRentCategory() {
-        return rentCategory;
-    }
-
-    public void setRentCategory(int rentCategory) {
-        this.rentCategory = rentCategory;
     }
 
     public int getRentPricePerDay() {
@@ -72,6 +65,10 @@ public abstract class Car {
 
     public void setFuelType(String fuelType) {
         this.fuelType = fuelType;
+    }
+
+    public RentCategory getRentCategory() {
+        return rentCategory;
     }
 
     @Override

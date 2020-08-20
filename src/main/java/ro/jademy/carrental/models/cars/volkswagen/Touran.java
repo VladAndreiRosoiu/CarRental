@@ -1,8 +1,10 @@
 package ro.jademy.carrental.models.cars.volkswagen;
 
+import ro.jademy.carrental.models.cars.RentCategory;
+
 public class Touran extends Volkswagen {
 
-    public Touran(int rentCategory, int rentPricePerDay, int seatNumber, String fuelType) {
-        super("Touran", rentCategory, rentPricePerDay, seatNumber, fuelType);
+    public Touran( int rentPricePerDay, int seatNumber, String fuelType, RentCategory rentCategory) {
+        super("Touran",  rentPricePerDay, seatNumber, fuelType, rentCategory);
     }
 }
