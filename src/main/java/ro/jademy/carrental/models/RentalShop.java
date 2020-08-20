@@ -36,15 +36,11 @@ public class RentalShop {
     }
 
     public void rentalShop() {
-
-        int menuChoice;
-        boolean exitApp;
-
         do {
-            exitApp = false;
             printWelcome();
             doLogin();
             do {
+                int menuChoice;
                 if (loggedInSalesman != null) {
                     showSalesmanMenu();
                     System.out.println("Please enter choice:");
@@ -75,11 +71,12 @@ public class RentalShop {
                             break;
                         case 7:
                             //log out
-                            loggedInSalesman = authService.logOutSalesman(loggedInSalesman);
+                            System.out.println("Logged out!");
+                            loggedInSalesman = null;
                             break;
                         case 8:
-                            loggedInSalesman = authService.logOutSalesman(loggedInSalesman);
-                            exitApp = authService.doExitApp();
+                            System.out.println("Exited application!");
+                            System.exit(0);
                             break;
                         default:
                             printError();
@@ -108,14 +105,13 @@ public class RentalShop {
                             break;
                         case 6:
                             //log out
-                            loggedInClient = authService.logOutClient(loggedInClient);
                             System.out.println("Logged out!");
+                            loggedInClient = null;
                             break;
                         case 7:
                             //exit app
-                            loggedInClient = authService.logOutClient(loggedInClient);
-                            exitApp = authService.doExitApp();
                             System.out.println("Exited application!");
+                            System.exit(0);
                             break;
                         default:
                             printError();
@@ -123,8 +119,7 @@ public class RentalShop {
                     }
                 }
             } while (loggedInClient != null || loggedInSalesman != null);
-        } while (!exitApp);
-
+        } while (true);
     }
 
     //_____________________________________General use related methods__________________________________________________
