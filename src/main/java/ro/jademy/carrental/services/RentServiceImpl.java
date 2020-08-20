@@ -19,13 +19,13 @@ public class RentServiceImpl implements RentService {
         LocalDate dateToRentCategoryThreeCar = currentDate.minusYears(3);
         LocalDate dateToRentCategoryFourCar = currentDate.minusYears(3);
 
-        if (car.getRentCategory()== RentCategory.ONE) {
+        if (car.getRentCategory() == RentCategory.ONE) {
             return client.getLicenceIssueDate().isBefore(dateToRentCategoryOneCar);
-        } else if (car.getRentCategory()== RentCategory.TWO) {
+        } else if (car.getRentCategory() == RentCategory.TWO) {
             return client.getLicenceIssueDate().isBefore(dateToRentCategoryTwoCar);
-        } else if (car.getRentCategory()== RentCategory.THREE) {
+        } else if (car.getRentCategory() == RentCategory.THREE) {
             return client.getLicenceIssueDate().isBefore(dateToRentCategoryThreeCar);
-        } else if (car.getRentCategory()== RentCategory.FOUR) {
+        } else if (car.getRentCategory() == RentCategory.FOUR) {
             return client.getLicenceIssueDate().isBefore(dateToRentCategoryFourCar);
         }
         return false;
@@ -34,16 +34,16 @@ public class RentServiceImpl implements RentService {
 
     @Override
     public boolean validateDepositForRent(Client client, Car car) {
-        if (client.getDeposit() >= 100 && car.getRentCategory()== RentCategory.ONE) {
+        if (client.getDeposit() >= 100 && car.getRentCategory() == RentCategory.ONE) {
             return true;
         }
-        if (client.getDeposit() >= 200 && car.getRentCategory()== RentCategory.TWO) {
+        if (client.getDeposit() >= 200 && car.getRentCategory() == RentCategory.TWO) {
             return true;
         }
-        if (client.getDeposit() >= 300 && car.getRentCategory()== RentCategory.THREE) {
+        if (client.getDeposit() >= 300 && car.getRentCategory() == RentCategory.THREE) {
             return true;
         }
-        return client.getDeposit() >= 400 && car.getRentCategory()== RentCategory.FOUR;
+        return client.getDeposit() >= 400 && car.getRentCategory() == RentCategory.FOUR;
     }
 
     @Override
@@ -58,13 +58,13 @@ public class RentServiceImpl implements RentService {
         boolean daysToRent;
         daysToRent = nrOfDays > 10;
 
-        if (car.getRentCategory()== RentCategory.ONE && daysToRent) {
+        if (car.getRentCategory() == RentCategory.ONE && daysToRent) {
             return (car.getRentPricePerDay() - 2) * nrOfDays;
-        } else if (car.getRentCategory()== RentCategory.TWO && daysToRent) {
+        } else if (car.getRentCategory() == RentCategory.TWO && daysToRent) {
             return (car.getRentPricePerDay() - 5) * nrOfDays;
-        } else if (car.getRentCategory()== RentCategory.THREE && daysToRent) {
+        } else if (car.getRentCategory() == RentCategory.THREE && daysToRent) {
             return (car.getRentPricePerDay() - 15) * nrOfDays;
-        } else if ((car.getRentCategory()== RentCategory.FOUR && daysToRent)) {
+        } else if ((car.getRentCategory() == RentCategory.FOUR && daysToRent)) {
             return (car.getRentPricePerDay() - 15) * nrOfDays;
         } else {
             return car.getRentPricePerDay() * nrOfDays;

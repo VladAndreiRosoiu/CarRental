@@ -19,24 +19,24 @@ public class CarList {
 
 
     public static List<Car> getCarList() {
-        Car car1 = new Logan( 10, 4, "Gasoline", RentCategory.ONE);
-        Car car2 = new Logan( 10, 4, "Diesel", RentCategory.ONE);
-        Car car3 = new Sandero( 7, 4, "Gasoline", RentCategory.ONE);
-        Car car4 = new Sandero( 7, 4, "Gasoline", RentCategory.ONE);
-        Car car5 = new MCV( 15, 5, "Diesel", RentCategory.ONE);
-        Car car6 = new MCV( 15, 5, "Diesel", RentCategory.ONE);
-        Car car7 = new Golf( 20, 4, "Diesel", RentCategory.TWO);
-        Car car8 = new Golf( 20, 4, "Gasoline", RentCategory.TWO);
-        Car car9 = new Touran( 25, 5, "Diesel", RentCategory.TWO);
-        Car car10 = new Touran( 25, 7, "Diesel", RentCategory.TWO);
-        Car car11 = new Tuareg( 60, 7, "Diesel", RentCategory.TWO);
-        Car car12 = new Tuareg( 60, 5, "Diesel", RentCategory.TWO);
-        Car car13 = new AClass( 30, 4, "Gasoline", RentCategory.TWO);
-        Car car14 = new AClass( 30, 4, "Gasoline", RentCategory.TWO);
-        Car car15 = new CClass( 40, 5, "Diesel", RentCategory.THREE);
-        Car car16 = new CClass( 40, 5, "Diesel", RentCategory.THREE);
-        Car car17 = new GLE( 80, 5, "Diesel", RentCategory.FOUR);
-        Car car18 = new GLE( 80, 5, "Gasoline", RentCategory.FOUR);
+        Car car1 = new Logan(10, 4, "Gasoline", RentCategory.ONE);
+        Car car2 = new Logan(10, 4, "Diesel", RentCategory.ONE);
+        Car car3 = new Sandero(7, 4, "Gasoline", RentCategory.ONE);
+        Car car4 = new Sandero(7, 4, "Gasoline", RentCategory.ONE);
+        Car car5 = new MCV(15, 5, "Diesel", RentCategory.ONE);
+        Car car6 = new MCV(15, 5, "Diesel", RentCategory.ONE);
+        Car car7 = new Golf(20, 4, "Diesel", RentCategory.TWO);
+        Car car8 = new Golf(20, 4, "Gasoline", RentCategory.TWO);
+        Car car9 = new Touran(25, 5, "Diesel", RentCategory.TWO);
+        Car car10 = new Touran(25, 7, "Diesel", RentCategory.TWO);
+        Car car11 = new Tuareg(60, 7, "Diesel", RentCategory.TWO);
+        Car car12 = new Tuareg(60, 5, "Diesel", RentCategory.TWO);
+        Car car13 = new AClass(30, 4, "Gasoline", RentCategory.TWO);
+        Car car14 = new AClass(30, 4, "Gasoline", RentCategory.TWO);
+        Car car15 = new CClass(40, 5, "Diesel", RentCategory.THREE);
+        Car car16 = new CClass(40, 5, "Diesel", RentCategory.THREE);
+        Car car17 = new GLE(80, 5, "Diesel", RentCategory.FOUR);
+        Car car18 = new GLE(80, 5, "Gasoline", RentCategory.FOUR);
         List<Car> carList = new ArrayList<>();
         carList.add(car1);
         carList.add(car2);

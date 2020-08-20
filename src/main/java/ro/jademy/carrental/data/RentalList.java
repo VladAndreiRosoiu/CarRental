@@ -17,8 +17,8 @@ public class RentalList {
     public List<RentedCar> getRentalList() {
         List<RentedCar> rentedCars = new ArrayList<>();
         Car car1 = new Logan(110, 4, "Gasoline", RentCategory.ONE);
-        Car car2 = new GLE( 80, 5, "Gasoline", RentCategory.FOUR);
-        Car car3 = new GLE( 80, 5, "Gasoline", RentCategory.FOUR);
+        Car car2 = new GLE(80, 5, "Gasoline", RentCategory.FOUR);
+        Car car3 = new GLE(80, 5, "Gasoline", RentCategory.FOUR);
         LocalDate pickUpDate = LocalDate.now();
         LocalDate returnDate = pickUpDate.plusDays(1);
         User user1 = new Client("Test1", "Test1", "test", "test", LocalDate.of(2010, 2, 28));

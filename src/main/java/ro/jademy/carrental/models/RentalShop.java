@@ -236,11 +236,11 @@ public class RentalShop {
     private void showDepositInformation(Car car) {
         System.out.println("To rent a car, you need to make a deposit first!");
         System.out.println("Your deposit will be refunded when you return the car! ");
-        if (car.getRentCategory()== RentCategory.ONE) {
+        if (car.getRentCategory() == RentCategory.ONE) {
             System.out.println("For a category one car you need to deposit at least 100.");
-        } else if (car.getRentCategory()== RentCategory.TWO) {
+        } else if (car.getRentCategory() == RentCategory.TWO) {
             System.out.println("For a category two car you need to deposit at least 200.");
-        } else if (car.getRentCategory()== RentCategory.THREE) {
+        } else if (car.getRentCategory() == RentCategory.THREE) {
             System.out.println("For a category three car you need to deposit at least 300.");
         } else {
             System.out.println("For a category four car you need to deposit at least 400.");
